@@ -71,10 +71,30 @@ public class part2kaban {
             JOptionPane.showMessageDialog(null, "Task successfully captured");
         }
         String developerDetails = JOptionPane.showInputDialog("Enter Developer Details (First Last):");
-        int taskDuration = Integer.parseInt(JOptionPane.showInputDialog("Enter Task Duration (in hours):"));
-        String taskStatus = JOptionPane.showInputDialog("Enter Task Status (To Do, Doing, Done):");
+       String[] statusOptions = {"To Do", "Done", "Doing"};
+        int option = JOptionPane.showOptionDialog(null, "Select Task Status", "Task Status",
+                                                   JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                                                   null, statusOptions, statusOptions[0]);
+        
+        String taskStatus;
+        switch (option) {
+            case 0:
+                taskStatus = "To Do";
+                break;
+            case 1:
+                taskStatus = "Done";
+                break;
+            case 2:
+                taskStatus = "Doing";
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Incorrect Input");
+                return null;
+        }
+        int taskDuration = 0;
 
-        Task task = new Task(taskName, taskDescription, developerDetails, taskDuration, taskStatus);
+    
+        var task = new Task(taskName, taskDescription, developerDetails, taskDuration, taskStatus);
         task.setTaskID(generateTaskID(task));
 
         return task;
@@ -91,9 +111,23 @@ public class part2kaban {
         taskNumber++;
         return taskID;
     }
+
+    private static class task {
+
+        public task() {
+        }
+    }
 }
 
 class Task {
+
+    static short returnTotalHours() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    static short returnTotalHours() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     private String taskName;
     private String taskDescription;
     private String developerDetails;
@@ -141,6 +175,16 @@ class Task {
         this.taskStatus = taskStatus;
     }
 
+   public boolean checkTaskDescription() {
+        return taskDescription.length() <= 50;
+    }
+
+    public String createTaskID() {
+        return taskName.substring(0, 2).toUpperCase() + ":" + part2kaban.taskNumber + ":" +
+               developerDetails.substring(developerDetails.length() - 3).toUpperCase();
+    } 
+    
+    
     public String printTaskDetails() {
         return "Task Status: " + taskStatus + "\n" +
                "Developer Details: " + developerDetails + "\n" +
@@ -150,7 +194,7 @@ class Task {
                "Task ID: " + taskID + "\n" +
                "Duration: " + taskDuration + " hours";
     }
+public static int returnTotalHoures(){
+return part2kaban.totalHours;
 }
-
-
-
+}
