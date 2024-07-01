@@ -1,14 +1,23 @@
+
 package amahlemagocoba.poepart1;
 
+    
+
+
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
-public class EasyKanban {
+public class EasyKanban1 {
+
     static String username;
     static String password;
     static String firstName;
     static String lastName;
     static int totalHours = 0;
     static int taskNumber = 0;
+
+    static List<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         // Welcome message
@@ -36,7 +45,7 @@ public class EasyKanban {
                             processTasks();
                             break;
                         case "2":
-                            JOptionPane.showMessageDialog(null, "Comig Soon");
+                            JOptionPane.showMessageDialog(null, displayReport());
                             break;
                         case "3":
                             running = false;
@@ -107,6 +116,7 @@ public class EasyKanban {
             Task task = createTask();
             displayTaskDetails(task);
             totalHours += task.getTaskDuration();
+            tasks.add(task);
         }
 
         JOptionPane.showMessageDialog(null, "Total hours across all tasks: " + totalHours);
@@ -136,63 +146,61 @@ public class EasyKanban {
         taskNumber++;
         return taskID;
     }
-}
 
-class Task {
-    private String taskName;
-    private String taskDescription;
-    private String developerDetails;
-    private int taskDuration;
-    private String taskID;
-    private String taskStatus;
-
-    public Task(String taskName, String taskDescription, String developerDetails, int taskDuration, String taskStatus) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.developerDetails = developerDetails;
-        this.taskDuration = taskDuration;
-        this.taskStatus = taskStatus;
+    public static String displayReport() {
+        StringBuilder report = new StringBuilder("All Tasks:\n");
+        for (Task task : tasks) {
+            report.append(task.printTaskDetails()).append("\n\n");
+        }
+        return report.toString();
     }
 
-    public String getTaskName() {
-        return taskName;
+    public static List<String> getDevelopers() {
+        List<String> developers = new ArrayList<>();
+        for (Task task : tasks) {
+            developers.add(task.getDeveloperDetails());
+        }
+        return developers;
     }
 
-    public String getTaskDescription() {
-        return taskDescription;
+    public static Task getTaskWithLongestDuration() {
+        Task longestTask = null;
+        for (Task task : tasks) {
+            if (longestTask == null || task.getTaskDuration() > longestTask.getTaskDuration()) {
+                longestTask = task;
+            }
+        }
+        return longestTask;
     }
 
-    public String getDeveloperDetails() {
-        return developerDetails;
+    public static Task searchTaskByName(String taskName) {
+        for (Task task : tasks) {
+            if (task.getTaskName().equalsIgnoreCase(taskName)) {
+                return task;
+            } else {
+            }
+        }
+        return null;
     }
 
-    public int getTaskDuration() {
-        return taskDuration;
+    public static List<Task> searchTasksByDeveloper(String developer) {
+        List<Task> developerTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDeveloperDetails().equalsIgnoreCase(developer)) {
+                developerTasks.add(task);
+            }
+        }
+        return developerTasks;
     }
 
-    public String getTaskID() {
-        return taskID;
-    }
-
-    public void setTaskID(String taskID) {
-        this.taskID = taskID;
-    }
-
-    public String getTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
-    public String printTaskDetails() {
-        return "Task Status: " + taskStatus + "\n" +
-               "Developer Details: " + developerDetails + "\n" +
-               "Task Number: " + EasyKanban.taskNumber + "\n" +
-               "Task Name: " + taskName + "\n" +
-               "Task Description: " + taskDescription + "\n" +
-               "Task ID: " + taskID + "\n" +
-               "Duration: " + taskDuration + " hours";
+    public static boolean deleteTaskByName(String taskName) {
+        Task task = searchTaskByName(taskName);
+        if (task != null) {
+            tasks.remove(task);
+            return true;
+        }
+        return false;
     }
 }
+
+

@@ -1,14 +1,21 @@
-package amahlemagocoba.poepart1;
+
 
 import javax.swing.JOptionPane;
 
-public class EasyKanban {
+public class poepart1 {
     static String username;
     static String password;
     static String firstName;
     static String lastName;
     static int totalHours = 0;
     static int taskNumber = 0;
+
+    static String[] developers = new String[100];
+    static String[] taskNames = new String[100];
+    static String[] taskIDs = new String[100];
+    static int[] taskDurations = new int[100];
+    static String[] taskStatuses = new String[100];
+    static int taskCount = 0;
 
     public static void main(String[] args) {
         // Welcome message
@@ -36,7 +43,7 @@ public class EasyKanban {
                             processTasks();
                             break;
                         case "2":
-                            JOptionPane.showMessageDialog(null, "Comig Soon");
+                            displayReport();
                             break;
                         case "3":
                             running = false;
@@ -107,6 +114,14 @@ public class EasyKanban {
             Task task = createTask();
             displayTaskDetails(task);
             totalHours += task.getTaskDuration();
+            
+            // Add task details to arrays
+            developers[taskCount] = task.getDeveloperDetails();
+            taskNames[taskCount] = task.getTaskName();
+            taskIDs[taskCount] = task.getTaskID();
+            taskDurations[taskCount] = task.getTaskDuration();
+            taskStatuses[taskCount] = task.getTaskStatus();
+            taskCount++;
         }
 
         JOptionPane.showMessageDialog(null, "Total hours across all tasks: " + totalHours);
@@ -136,63 +151,47 @@ public class EasyKanban {
         taskNumber++;
         return taskID;
     }
-}
 
-class Task {
-    private String taskName;
-    private String taskDescription;
-    private String developerDetails;
-    private int taskDuration;
-    private String taskID;
-    private String taskStatus;
-
-    public Task(String taskName, String taskDescription, String developerDetails, int taskDuration, String taskStatus) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.developerDetails = developerDetails;
-        this.taskDuration = taskDuration;
-        this.taskStatus = taskStatus;
+    public static void displayReport() {
+        StringBuilder report = new StringBuilder();
+        for (int i = 0; i < taskCount; i++) {
+            report.append("Task ID: ").append(taskIDs[i])
+                  .append("\nDeveloper: ").append(developers[i])
+                  .append("\nTask Name: ").append(taskNames[i])
+                  .append("\nTask Duration: ").append(taskDurations[i])
+                  .append("\nTask Status: ").append(taskStatuses[i])
+                  .append("\n\n");
+        }
+        JOptionPane.showMessageDialog(null, report.toString());
     }
 
-    public String getTaskName() {
-        return taskName;
+    // Additional methods to handle new requirements
+    public static void displayTasksWithStatus(String status) {
+        StringBuilder report = new StringBuilder();
+        for (int i = 0; i < taskCount; i++) {
+            if (taskStatuses[i].equalsIgnoreCase(status)) {
+                report.append("Developer: ").append(developers[i])
+                      .append("\nTask Name: ").append(taskNames[i])
+                      .append("\nTask Duration: ").append(taskDurations[i])
+                      .append("\n\n");
+            }
+        }
+        JOptionPane.showMessageDialog(null, report.toString());
     }
 
-    public String getTaskDescription() {
-        return taskDescription;
+    public static void displayLongestTask() {
+        int longestDuration = 0;
+        int index = 0;
+        for (int i = 0; i < taskCount; i++) {
+            if (taskDurations[i] > longestDuration) {
+                longestDuration = taskDurations[i];
+                index = i;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Developer: " + developers[index] + "\nDuration: " + taskDurations[index]);
     }
 
-    public String getDeveloperDetails() {
-        return developerDetails;
-    }
+    public static void searchTaskByName(String name) {
+        StringBuilder report = new StringBuilder();
+        for (int i = 0; i < taskCount; i++) {
 
-    public int getTaskDuration() {
-        return taskDuration;
-    }
-
-    public String getTaskID() {
-        return taskID;
-    }
-
-    public void setTaskID(String taskID) {
-        this.taskID = taskID;
-    }
-
-    public String getTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
-    public String printTaskDetails() {
-        return "Task Status: " + taskStatus + "\n" +
-               "Developer Details: " + developerDetails + "\n" +
-               "Task Number: " + EasyKanban.taskNumber + "\n" +
-               "Task Name: " + taskName + "\n" +
-               "Task Description: " + taskDescription + "\n" +
-               "Task ID: " + taskID + "\n" +
-               "Duration: " + taskDuration + " hours";
-    }
-}
