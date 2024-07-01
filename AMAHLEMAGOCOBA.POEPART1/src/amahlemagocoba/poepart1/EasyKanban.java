@@ -11,6 +11,7 @@ public class EasyKanban {
     static int taskNumber = 0;
 
     public static void main(String[] args) {
+        // Welcome message
         JOptionPane.showMessageDialog(null, "Welcome to EasyKanban");
 
         // User registration
@@ -19,8 +20,34 @@ public class EasyKanban {
         // User login
         boolean loggedIn = login();
         if (loggedIn) {
-            // Process tasks
-            processTasks();
+            JOptionPane.showMessageDialog(null, "Welcome to EasyKanban");
+
+            boolean running = true;
+            while (running) {
+                String menu = "1. Add tasks\n2. Show report\n3. Quit";
+                String choice = JOptionPane.showInputDialog(menu);
+
+                if (choice == null) {
+                    // If the user closes the dialog
+                    running = false;
+                } else {
+                    switch (choice) {
+                        case "1":
+                            processTasks();
+                            break;
+                        case "2":
+                            JOptionPane.showMessageDialog(null, "Coming Soon");
+                            break;
+                        case "3":
+                            running = false;
+                            JOptionPane.showMessageDialog(null, "Exiting program.");
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Login failed. Exiting program.");
         }
@@ -75,13 +102,13 @@ public class EasyKanban {
 
     public static void processTasks() {
         int numTasks = Integer.parseInt(JOptionPane.showInputDialog("How many tasks do you want to enter?"));
-        
+
         for (int i = 0; i < numTasks; i++) {
             Task task = createTask();
             displayTaskDetails(task);
             totalHours += task.getTaskDuration();
         }
-        
+
         JOptionPane.showMessageDialog(null, "Total hours across all tasks: " + totalHours);
     }
 
